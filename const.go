@@ -16,9 +16,9 @@ const (
 	// 支付成功
 	ORDER_STATUS_SUCCESS = 0
 	// 支付取消
-	ORDER_STATUS_CANCEL = 0
+	ORDER_STATUS_CANCEL = 1
 	// 支付待处理
-	ORDER_STATUS_PENDING = 0
+	ORDER_STATUS_PENDING = 2
 )
 
 const (
