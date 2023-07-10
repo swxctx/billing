@@ -21,9 +21,14 @@ var (
 )
 
 // initCache
-func initCache(cfg *redis.Config, cacheKey ...string) error {
+func initCache(redisAddr string, cacheKey ...string) error {
 	// init redis client
-	cli, err := redis.NewClient(cfg)
+	cli, err := redis.NewClient(&redis.Config{
+		DeployType: "single",
+		ForSingle: redis.SingleConfig{
+			Addr: redisAddr,
+		},
+	})
 	if err != nil {
 		return err
 	}

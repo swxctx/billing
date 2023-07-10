@@ -1,9 +1,5 @@
 package billing
 
-import (
-	"github.com/xiaoenai/xmodel/redis"
-)
-
 // Config owechat配置中心
 type Config struct {
 	// client id
@@ -20,8 +16,8 @@ type Config struct {
 	Debug bool `yaml:"debug"`
 	// TimeoutSecond 超时时间
 	TimeoutSecond int64 `yaml:"timeout_second"`
-	// Redis 缓存的redis配置
-	Redis *redis.Config `yaml:"redis"`
+	// Redis 缓存的redis配置[127.0.0.1:6379]
+	RedisAddr string `yaml:"redis_addr"`
 }
 
 // Init
@@ -41,7 +37,7 @@ func Init(cfg *Config) error {
 	}
 
 	// init cache redis
-	if err := initCache(cfg.Redis, cfg.CacheKey); err != nil {
+	if err := initCache(cfg.RedisAddr, cfg.CacheKey); err != nil {
 		return err
 	}
 	return nil

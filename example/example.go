@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/swxctx/billing"
-	"github.com/xiaoenai/xmodel/redis"
 )
 
 func main() {
@@ -14,12 +13,7 @@ func main() {
 		PackageName:  "",
 		RefreshToken: "",
 		Debug:        true,
-		Redis: &redis.Config{
-			DeployType: "single",
-			ForSingle: redis.SingleConfig{
-				Addr: "127.0.0.1:6379",
-			},
-		},
+		RedisAddr:    "127.0.0.1:6379",
 	})
 	if err != nil {
 		fmt.Println("init err")
