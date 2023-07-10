@@ -34,11 +34,21 @@ func main() {
 	}
 	fmt.Printf("accessToken-> %v\n", accessToken)
 
+	productId := ""
+	pucharseToken := ""
+
 	// 查询订单
-	orderInfo, err := billing.Verify("", "")
+	orderInfo, err := billing.Verify(productId, pucharseToken)
 	if err != nil {
 		fmt.Printf("err-> %v", err)
 		return
 	}
 	fmt.Printf("orderInfo-> %v", orderInfo)
+
+	if orderInfo.ConsumptionState == billing.CONSUME_STATE_UNCONFIRMED {
+		// 确认订单
+		if err := billing.Consume(productId, pucharseToken); err != nil {
+			fmt.Printf("Consume, err-> %v", err)
+		}
+	}
 }

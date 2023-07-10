@@ -113,7 +113,7 @@ func (c *Client) verify(productId, purchaseToken string) (*OrderInfo, error) {
 		return nil, err
 	}
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("get access token http status code is %d", resp.StatusCode)
+		return nil, fmt.Errorf("verify order http status code is %d", resp.StatusCode)
 	}
 	defer resp.Body.Close()
 
@@ -136,4 +136,82 @@ func (c *Client) verify(productId, purchaseToken string) (*OrderInfo, error) {
 		return nil, fmt.Errorf("get order is nil for remote")
 	}
 	return orderInfo, nil
+}
+
+// consume 确认订单[消耗型商品]
+func (c *Client) consume(productId, purchaseToken string) error {
+	// 检查刷新 access token
+	if len(c.accessToken) <= 0 || c.accessTokenExpire.Unix() < time.Now().Unix() {
+		// 刷新token
+		_, err := c.getAccessToken()
+		if err != nil {
+			return err
+		}
+	}
+
+	// 确认订单
+	requestParams := consumeRequest{
+		AccessToken: c.accessToken,
+	}
+
+	// new request
+	req := ghttp.Request{
+		Url:       fmt.Sprintf(consumeApi, c.packageName, productId, purchaseToken),
+		Query:     requestParams,
+		Method:    "POST",
+		ShowDebug: client.debug,
+		Timeout:   time.Duration(c.timeoutSecond) * time.Second,
+	}
+	req.AddHeader("Content-Type", "application/json")
+
+	// send request
+	resp, err := req.Do()
+	if err != nil {
+		return err
+	}
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("counsume product http status code is %d", resp.StatusCode)
+	}
+	defer resp.Body.Close()
+
+	return nil
+}
+
+// acknowledge 确认订单[非消耗型商品]
+func (c *Client) acknowledge(productId, purchaseToken string) error {
+	// 检查刷新 access token
+	if len(c.accessToken) <= 0 || c.accessTokenExpire.Unix() < time.Now().Unix() {
+		// 刷新token
+		_, err := c.getAccessToken()
+		if err != nil {
+			return err
+		}
+	}
+
+	// 确认订单
+	requestParams := consumeRequest{
+		AccessToken: c.accessToken,
+	}
+
+	// new request
+	req := ghttp.Request{
+		Url:       fmt.Sprintf(acknowledgeApi, c.packageName, productId, purchaseToken),
+		Body:      requestParams,
+		Method:    "POST",
+		ShowDebug: client.debug,
+		Timeout:   time.Duration(c.timeoutSecond) * time.Second,
+	}
+	req.AddHeader("Content-Type", "application/json")
+
+	// send request
+	resp, err := req.Do()
+	if err != nil {
+		return err
+	}
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("acknowledge product http status code is %d", resp.StatusCode)
+	}
+	defer resp.Body.Close()
+
+	return nil
 }

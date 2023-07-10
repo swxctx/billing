@@ -36,3 +36,13 @@ func GetAccessToken() (*AccessToken, error) {
 func Verify(productId, purchaseToken string) (*OrderInfo, error) {
 	return client.verify(productId, purchaseToken)
 }
+
+// Consume
+func Consume(productId, purchaseToken string) error {
+	return client.consume(productId, purchaseToken)
+}
+
+// Acknowledge
+func Acknowledge(productId, purchaseToken string) error {
+	return client.acknowledge(productId, purchaseToken)
+}

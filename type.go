@@ -71,3 +71,13 @@ type OrderInfo struct {
 	// 产品被授予时用户的 ISO 3166-1 alpha-2 结算区域代码
 	RegionCode string `json:"regionCode"`
 }
+
+// consumeRequest
+type consumeRequest struct {
+	AccessToken string `json:"access_token"`
+}
+
+// acknowledgeRequest
+type acknowledgeRequest struct {
+	AccessToken string `json:"access_token"`
+}
