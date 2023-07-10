@@ -196,7 +196,7 @@ func (c *Client) acknowledge(productId, purchaseToken string) error {
 	// new request
 	req := ghttp.Request{
 		Url:       fmt.Sprintf(acknowledgeApi, c.packageName, productId, purchaseToken),
-		Body:      requestParams,
+		Query:     requestParams,
 		Method:    "POST",
 		ShowDebug: client.debug,
 		Timeout:   time.Duration(c.timeoutSecond) * time.Second,
