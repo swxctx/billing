@@ -169,7 +169,7 @@ func (c *Client) consume(productId, purchaseToken string) error {
 	if err != nil {
 		return err
 	}
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != 204 {
 		return fmt.Errorf("counsume product http status code is %d", resp.StatusCode)
 	}
 	defer resp.Body.Close()
@@ -208,7 +208,7 @@ func (c *Client) acknowledge(productId, purchaseToken string) error {
 	if err != nil {
 		return err
 	}
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != 204 {
 		return fmt.Errorf("acknowledge product http status code is %d", resp.StatusCode)
 	}
 	defer resp.Body.Close()
